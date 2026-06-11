@@ -2,17 +2,41 @@
 // V-FIX — Type Definitions
 // ============================================================
 
-export type Role = 'Admin' | 'Technician' | 'Driver';
+export type Role = "Admin" | "Technician" | "Driver";
 
-export type TicketStatus = 'Pending' | 'In Progress' | 'On Hold' | 'Completed' | 'Closed';
+export type TicketStatus =
+  | "Pending"
+  | "In Progress"
+  | "On Hold"
+  | "Completed"
+  | "Closed";
 
-export type UrgencyLevel = 'Low' | 'Medium' | 'High' | 'Critical';
+export type UrgencyLevel = "Low" | "Medium" | "High" | "Critical";
 
-export type RepairCategory = 'Engine' | 'Electrical' | 'Tires' | 'Body' | 'Other';
+export type RepairCategory =
+  | "Engine"
+  | "Electrical"
+  | "Tires"
+  | "Body"
+  | "Brakes"
+  | "Oil Change"
+  | "Maintenance"
+  | "Glass"
+  | "Lighting"
+  | "Transmission"
+  | "Air Conditioning"
+  | "Fuel System"
+  | "Cooling"
+  | "Other";
 
-export type VehicleStatus = 'Active' | 'Under Repair' | 'Out of Service';
+export type VehicleStatus = "Active" | "Under Repair" | "Out of Service";
 
-export type VehicleType = 'Delivery Truck' | 'Passenger Van' | 'Pickup Truck' | 'Motorcycle' | 'Sedan';
+export type VehicleType =
+  | "Delivery Truck"
+  | "Passenger Van"
+  | "Pickup Truck"
+  | "Motorcycle"
+  | "Sedan";
 
 export interface User {
   id: string;
