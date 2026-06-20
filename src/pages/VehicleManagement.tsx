@@ -41,41 +41,30 @@ import * as yup from "yup";
 import { useData } from "../contexts/DataContext";
 import { StatusChip } from "../components/StatusChip";
 import type { Vehicle, VehicleType, VehicleStatus } from "../types";
-
-const vehicleTypes: VehicleType[] = [
-  "Delivery Truck",
-  "Passenger Van",
-  "Pickup Truck",
-  "Motorcycle",
-  "Sedan",
-];
-const vehicleStatuses: VehicleStatus[] = [
-  "Active",
-  "Under Repair",
-  "Out of Service",
-];
+import {
+  VEHICLE_TYPE_OPTIONS,
+  VEHICLE_STATUS_OPTIONS,
+  getVehicleTypeLabel,
+  getVehicleStatusLabel,
+  STATUS_COLORS,
+} from "../data/constants";
 
 // ─── Validation Schema ─────────────────────────────────────
 const vehicleSchema = yup.object().shape({
   licensePlate: yup
     .string()
-    .required("License plate is required")
-    .min(2, "Too short"),
-  type: yup.string().oneOf(vehicleTypes).required("Vehicle type is required"),
-  brand: yup.string().required("Brand is required"),
-  model: yup.string().required("Model is required"),
-  year: yup.number().required("Year is required").min(2000).max(2025),
-  status: yup.string().oneOf(vehicleStatuses).required("Status is required"),
-  mileage: yup.number().required("Mileage is required").min(0),
+    .required("กรุณาระบุทะเบียนรถ")
+    .min(2, "ทะเบียนรถต้องมีอย่างน้อย 2 ตัวอักษร"),
+  type: yup.string().oneOf(VEHICLE_TYPE_OPTIONS).required("กรุณาระบุประเภทรถ"),
+  brand: yup.string().required("กรุณาระบุยี่ห้อ"),
+  model: yup.string().required("กรุณาระบุรุ่น"),
+  year: yup.number().required("กรุณาระบุปีที่ผลิต").min(2000).max(2025),
+  status: yup.string().oneOf(VEHICLE_STATUS_OPTIONS).required("กรุณาระบุสถานะ"),
+  mileage: yup.number().required("กรุณาระบุระยะทาง").min(0),
 });
 
 type VehicleFormData = yup.InferType<typeof vehicleSchema>;
 
-const statusColors: Record<VehicleStatus, { bg: string; color: string }> = {
-  Active: { bg: "#E8F5E9", color: "#2E7D32" },
-  "Under Repair": { bg: "#FFF3E0", color: "#E65100" },
-  "Out of Service": { bg: "#FFEBEE", color: "#C62828" },
-};
 
 const VehicleManagement: React.FC = () => {
   const {
@@ -103,11 +92,11 @@ const VehicleManagement: React.FC = () => {
     resolver: yupResolver(vehicleSchema) as any,
     defaultValues: {
       licensePlate: "",
-      type: "Delivery Truck",
+      type: VEHICLE_TYPE_OPTIONS[0],
       brand: "",
       model: "",
       year: 2024,
-      status: "Active",
+      status: VEHICLE_STATUS_OPTIONS[0],
       mileage: 0,
     },
   });
@@ -116,11 +105,11 @@ const VehicleManagement: React.FC = () => {
     setEditingVehicle(null);
     reset({
       licensePlate: "",
-      type: "Delivery Truck",
+      type: VEHICLE_TYPE_OPTIONS[0],
       brand: "",
       model: "",
       year: 2024,
-      status: "Active",
+      status: VEHICLE_STATUS_OPTIONS[0],
       mileage: 0,
     });
     setDialogOpen(true);
@@ -211,7 +200,7 @@ const VehicleManagement: React.FC = () => {
                 <TableCell>ประเภท</TableCell>
                 <TableCell>ยี่ห้อ / รุ่น</TableCell>
                 <TableCell>ปีที่ผลิต</TableCell>
-                <TableCell>ระยะไมล์</TableCell>
+                <TableCell>ระยะทาง</TableCell>
                 <TableCell>สถานะ</TableCell>
                 <TableCell align="center">จัดการ</TableCell>
               </TableRow>
@@ -229,7 +218,7 @@ const VehicleManagement: React.FC = () => {
                         {vehicle.id}
                       </Typography>
                     </TableCell>
-                    <TableCell>{vehicle.type}</TableCell>
+                    <TableCell>{getVehicleTypeLabel(vehicle.type)}</TableCell>
                     <TableCell>
                       {vehicle.brand} {vehicle.model}
                     </TableCell>
@@ -237,18 +226,18 @@ const VehicleManagement: React.FC = () => {
                     <TableCell>{vehicle.mileage.toLocaleString()} km</TableCell>
                     <TableCell>
                       <Chip
-                        label={vehicle.status}
+                        label={getVehicleStatusLabel(vehicle.status)}
                         size="small"
                         sx={{
-                          backgroundColor: statusColors[vehicle.status].bg,
-                          color: statusColors[vehicle.status].color,
+                          backgroundColor: STATUS_COLORS.vehicle[vehicle.status].bg,
+                          color: STATUS_COLORS.vehicle[vehicle.status].color,
                           fontWeight: 700,
                           fontSize: "0.7rem",
                         }}
                       />
                     </TableCell>
                     <TableCell align="center">
-                      <Tooltip title="Repair History">
+                      <Tooltip title="ประวัติการซ่อม">
                         <IconButton
                           size="small"
                           onClick={() => handleViewHistory(vehicle)}
@@ -256,7 +245,7 @@ const VehicleManagement: React.FC = () => {
                           <HistoryIcon fontSize="small" />
                         </IconButton>
                       </Tooltip>
-                      <Tooltip title="Edit">
+                      <Tooltip title="แก้ไข">
                         <IconButton
                           size="small"
                           onClick={() => handleOpenEdit(vehicle)}
@@ -265,7 +254,7 @@ const VehicleManagement: React.FC = () => {
                           <EditIcon fontSize="small" />
                         </IconButton>
                       </Tooltip>
-                      <Tooltip title="Delete">
+                      <Tooltip title="ลบ">
                         <IconButton
                           size="small"
                           color="error"
@@ -305,7 +294,7 @@ const VehicleManagement: React.FC = () => {
         fullWidth
       >
         <DialogTitle sx={{ fontWeight: 700 }}>
-          {editingVehicle ? "Edit Vehicle" : "Add New Vehicle"}
+          {editingVehicle ? "แก้ไขข้อมูลรถยนต์" : "เพิ่มรถยนต์ใหม่"}
         </DialogTitle>
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogContent>
@@ -318,7 +307,7 @@ const VehicleManagement: React.FC = () => {
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="License Plate"
+                    label="ทะเบียนรถ"
                     error={!!errors.licensePlate}
                     helperText={errors.licensePlate?.message}
                     fullWidth
@@ -332,14 +321,14 @@ const VehicleManagement: React.FC = () => {
                   <TextField
                     {...field}
                     select
-                    label="Vehicle Type"
+                    label="ประเภทรถ"
                     error={!!errors.type}
                     helperText={errors.type?.message}
                     fullWidth
                   >
-                    {vehicleTypes.map((t) => (
+                    {VEHICLE_TYPE_OPTIONS.map((t) => (
                       <MenuItem key={t} value={t}>
-                        {t}
+                        {getVehicleTypeLabel(t)}
                       </MenuItem>
                     ))}
                   </TextField>
@@ -352,7 +341,7 @@ const VehicleManagement: React.FC = () => {
                   render={({ field }) => (
                     <TextField
                       {...field}
-                      label="Brand"
+                      label="ยี่ห้อ"
                       error={!!errors.brand}
                       helperText={errors.brand?.message}
                       fullWidth
@@ -365,7 +354,7 @@ const VehicleManagement: React.FC = () => {
                   render={({ field }) => (
                     <TextField
                       {...field}
-                      label="Model"
+                      label="รุ่น"
                       error={!!errors.model}
                       helperText={errors.model?.message}
                       fullWidth
@@ -380,7 +369,7 @@ const VehicleManagement: React.FC = () => {
                   render={({ field }) => (
                     <TextField
                       {...field}
-                      label="Year"
+                      label="ปีที่ผลิต"
                       type="number"
                       error={!!errors.year}
                       helperText={errors.year?.message}
@@ -394,7 +383,7 @@ const VehicleManagement: React.FC = () => {
                   render={({ field }) => (
                     <TextField
                       {...field}
-                      label="Mileage (km)"
+                      label="ระยะทาง (กม.)"
                       type="number"
                       error={!!errors.mileage}
                       helperText={errors.mileage?.message}
@@ -410,14 +399,14 @@ const VehicleManagement: React.FC = () => {
                   <TextField
                     {...field}
                     select
-                    label="Status"
+                    label="สถานะ"
                     error={!!errors.status}
                     helperText={errors.status?.message}
                     fullWidth
                   >
-                    {vehicleStatuses.map((s) => (
+                    {VEHICLE_STATUS_OPTIONS.map((s) => (
                       <MenuItem key={s} value={s}>
-                        {s}
+                        {getVehicleStatusLabel(s)}
                       </MenuItem>
                     ))}
                   </TextField>
@@ -426,9 +415,9 @@ const VehicleManagement: React.FC = () => {
             </Box>
           </DialogContent>
           <DialogActions sx={{ px: 3, pb: 2 }}>
-            <Button onClick={() => setDialogOpen(false)}>Cancel</Button>
+            <Button onClick={() => setDialogOpen(false)}>ยกเลิก</Button>
             <Button type="submit" variant="contained">
-              {editingVehicle ? "Update" : "Add Vehicle"}
+              {editingVehicle ? "บันทึกการแก้ไข" : "เพิ่มรถยนต์"}
             </Button>
           </DialogActions>
         </form>
@@ -439,17 +428,16 @@ const VehicleManagement: React.FC = () => {
         open={deleteConfirmOpen}
         onClose={() => setDeleteConfirmOpen(false)}
       >
-        <DialogTitle sx={{ fontWeight: 700 }}>Confirm Delete</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 700 }}>ยืนยันการลบ</DialogTitle>
         <DialogContent>
           <Typography>
-            Are you sure you want to delete this vehicle? This action cannot be
-            undone.
+            คุณแน่ใจหรือไม่ที่จะลบรถยนต์คันนี้? การกระทำนี้ไม่สามารถย้อนกลับได้
           </Typography>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={() => setDeleteConfirmOpen(false)}>Cancel</Button>
+          <Button onClick={() => setDeleteConfirmOpen(false)}>ยกเลิก</Button>
           <Button variant="contained" color="error" onClick={handleDelete}>
-            Delete
+            ลบ
           </Button>
         </DialogActions>
       </Dialog>
@@ -462,7 +450,7 @@ const VehicleManagement: React.FC = () => {
         fullWidth
       >
         <DialogTitle sx={{ fontWeight: 700 }}>
-          Repair History — {historyVehicle?.licensePlate}
+          ประวัติการซ่อม — {historyVehicle?.licensePlate}
         </DialogTitle>
         <DialogContent>
           {repairHistory.length === 0 ? (
@@ -470,7 +458,7 @@ const VehicleManagement: React.FC = () => {
               color="text.secondary"
               sx={{ py: 3, textAlign: "center" }}
             >
-              No repair history found for this vehicle.
+              ไม่พบประวัติการซ่อมสำหรับรถยนต์คันนี้
             </Typography>
           ) : (
             <Timeline position="alternate" sx={{ p: 0 }}>
@@ -517,7 +505,7 @@ const VehicleManagement: React.FC = () => {
           )}
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={() => setHistoryOpen(false)}>Close</Button>
+          <Button onClick={() => setHistoryOpen(false)}>ปิด</Button>
         </DialogActions>
       </Dialog>
     </Box>

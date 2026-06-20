@@ -1,12 +1,13 @@
 /* eslint-disable react-refresh/only-export-components */
 // ============================================================
 // V-FIX — Role Context
-// Manages role switching without authentication
+// Manages role switching with authentication integration
 // ============================================================
 
 import React, { createContext, useContext, useState, useMemo } from 'react';
 import type { Role, User } from '../types';
 import { mockUsers } from '../data/mockData';
+import { useAuth } from './AuthContext';
 
 interface RoleContextType {
   currentRole: Role;
@@ -25,7 +26,18 @@ const defaultUserByRole: Record<Role, string> = {
 };
 
 export const RoleProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentRole, setCurrentRole] = useState<Role>('Admin');
+  const { user } = useAuth();
+  const [currentRole, setCurrentRole] = useState<Role>(() => {
+    // Initialize role from authenticated user if available
+    return user?.role || 'Admin';
+  });
+
+  // Update role when user changes (login/logout)
+  React.useEffect(() => {
+    if (user) {
+      setCurrentRole(user.role);
+    }
+  }, [user]);
 
   const currentUser = useMemo(() => {
     const userId = defaultUserByRole[currentRole];

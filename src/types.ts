@@ -35,8 +35,7 @@ export type VehicleType =
   | "Delivery Truck"
   | "Passenger Van"
   | "Pickup Truck"
-  | "Motorcycle"
-  | "Sedan";
+  | "Motorcycle";
 
 export interface User {
   id: string;
@@ -51,7 +50,7 @@ export interface User {
 export interface Vehicle {
   id: string;
   licensePlate: string;
-  type?: VehicleType;
+  type: VehicleType;
   brand: string;
   model: string;
   year: number;

@@ -44,10 +44,10 @@ const roleColors: Record<Role, string> = {
 
 // ─── Validation Schema ─────────────────────────────────────
 const userSchema = yup.object().shape({
-  name: yup.string().required("ชื่อสถานกลายตอง"),
-  email: yup.string().email("อีเมลไม่ถูกต้อง").required("อีเมลตองการ"),
-  phone: yup.string().required("เบอร์โทรฟดัตอง"),
-  role: yup.string().oneOf(roles).required("บทบาทใช่งานตองการ"),
+  name: yup.string().required("กรุณาระบุชื่อ"),
+  email: yup.string().email("อีเมลไม่ถูกต้อง").required("กรุณาระบุอีเมล"),
+  phone: yup.string().required("กรุณาระบุเบอร์โทรศัพท์"),
+  role: yup.string().oneOf(roles).required("กรุณาระบุบทบาท"),
 });
 
 type UserFormData = yup.InferType<typeof userSchema>;
@@ -123,7 +123,7 @@ const UserManagement: React.FC = () => {
             จัดการผู้ใช้งาน
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            จัดการสิทธิมผู้ใช้งานและาถิคารผู้ปฏิบัติ
+            จัดการสิทธิ์ผู้ใช้งานและข้อมูลผู้ปฏิบัติงาน
           </Typography>
         </Box>
         <Button
@@ -197,7 +197,7 @@ const UserManagement: React.FC = () => {
                       </Typography>
                     </TableCell>
                     <TableCell align="center">
-                      <Tooltip title="Edit">
+                      <Tooltip title="แก้ไข">
                         <IconButton
                           size="small"
                           onClick={() => handleOpenEdit(user)}
@@ -234,7 +234,7 @@ const UserManagement: React.FC = () => {
         fullWidth
       >
         <DialogTitle sx={{ fontWeight: 700 }}>
-          {editingUser ? "Edit User" : "Add New User"}
+          {editingUser ? "แก้ไขข้อมูลผู้ใช้งาน" : "เพิ่มผู้ใช้งานใหม่"}
         </DialogTitle>
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogContent>
@@ -247,7 +247,7 @@ const UserManagement: React.FC = () => {
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Full Name"
+                    label="ชื่อ-นามสกุล"
                     error={!!errors.name}
                     helperText={errors.name?.message}
                     fullWidth
@@ -261,7 +261,7 @@ const UserManagement: React.FC = () => {
                   <TextField
                     {...field}
                     select
-                    label="Role"
+                    label="บทบาท"
                     error={!!errors.role}
                     helperText={errors.role?.message}
                     fullWidth
@@ -280,7 +280,7 @@ const UserManagement: React.FC = () => {
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Email Address"
+                    label="อีเมล"
                     type="email"
                     error={!!errors.email}
                     helperText={errors.email?.message}
@@ -294,7 +294,7 @@ const UserManagement: React.FC = () => {
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Phone Number"
+                    label="เบอร์โทรศัพท์"
                     error={!!errors.phone}
                     helperText={errors.phone?.message}
                     fullWidth
@@ -304,9 +304,9 @@ const UserManagement: React.FC = () => {
             </Box>
           </DialogContent>
           <DialogActions sx={{ px: 3, pb: 2 }}>
-            <Button onClick={() => setDialogOpen(false)}>Cancel</Button>
+            <Button onClick={() => setDialogOpen(false)}>ยกเลิก</Button>
             <Button type="submit" variant="contained">
-              {editingUser ? "Update" : "Add User"}
+              {editingUser ? "บันทึกการแก้ไข" : "เพิ่มผู้ใช้งาน"}
             </Button>
           </DialogActions>
         </form>

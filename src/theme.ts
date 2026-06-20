@@ -51,7 +51,7 @@ const theme = createTheme({
     divider: alpha("#2D3436", 0.08),
   },
   typography: {
-    fontFamily: '"Prompt", "Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: '"Sarabun", "Prompt", "Inter", "Roboto", "Helvetica", "Arial", sans-serif',
     h4: {
       fontWeight: 700,
       letterSpacing: "-0.02em",

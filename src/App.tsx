@@ -4,8 +4,10 @@ import CssBaseline from "@mui/material/CssBaseline";
 import theme from "./theme";
 import { DataProvider } from "./contexts/DataContext";
 import { useRole, RoleProvider } from "./contexts/RoleContext";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
 import Layout from "./components/Layout";
+import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import VehicleManagement from "./pages/VehicleManagement";
 import TicketList from "./pages/TicketList";
@@ -15,6 +17,7 @@ import UserManagement from "./pages/UserManagement";
 import Reports from "./pages/Reports";
 
 const AppContent: React.FC = () => {
+  const { isAuthenticated } = useAuth();
   const { currentRole } = useRole();
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null);
@@ -39,6 +42,11 @@ const AppContent: React.FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentRole]);
+
+  // Show login page if not authenticated
+  if (!isAuthenticated) {
+    return <Login />;
+  }
 
   const handleNavigate = (page: string) => {
     setSelectedTicketId(null);
@@ -96,11 +104,13 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <RoleProvider>
-        <DataProvider>
-          <AppContent />
-        </DataProvider>
-      </RoleProvider>
+      <AuthProvider>
+        <RoleProvider>
+          <DataProvider>
+            <AppContent />
+          </DataProvider>
+        </RoleProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

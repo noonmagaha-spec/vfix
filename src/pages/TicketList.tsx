@@ -22,7 +22,14 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useData } from "../contexts/DataContext";
 import { useRole } from "../contexts/RoleContext";
 import { StatusChip, UrgencyChip } from "../components/StatusChip";
-import type { TicketStatus, UrgencyLevel } from "../types";
+import type { TicketStatus, UrgencyLevel, RepairCategory } from "../types";
+import {
+  TICKET_STATUS_OPTIONS,
+  URGENCY_LEVEL_OPTIONS,
+  getTicketStatusLabel,
+  getUrgencyLevelLabel,
+  getRepairCategoryLabel,
+} from "../data/constants";
 
 const TicketList: React.FC<{ onNavigateToDetail: (id: string) => void }> = ({
   onNavigateToDetail,
@@ -132,11 +139,11 @@ const TicketList: React.FC<{ onNavigateToDetail: (id: string) => void }> = ({
             sx={{ minWidth: 150 }}
           >
             <MenuItem value="All">ทั้งหมด</MenuItem>
-            <MenuItem value="Pending">รอดำเนินการ</MenuItem>
-            <MenuItem value="In Progress">กำลังดำเนินการ</MenuItem>
-            <MenuItem value="On Hold">หยุดชั่วคราว</MenuItem>
-            <MenuItem value="Completed">เสร็จสิ้น</MenuItem>
-            <MenuItem value="Closed">ปิดแล้ว</MenuItem>
+            {TICKET_STATUS_OPTIONS.map((status) => (
+              <MenuItem key={status} value={status}>
+                {getTicketStatusLabel(status)}
+              </MenuItem>
+            ))}
           </TextField>
           <TextField
             select
@@ -149,10 +156,11 @@ const TicketList: React.FC<{ onNavigateToDetail: (id: string) => void }> = ({
             sx={{ minWidth: 150 }}
           >
             <MenuItem value="All">ทั้งหมด</MenuItem>
-            <MenuItem value="Low">ต่ำ</MenuItem>
-            <MenuItem value="Medium">ปานกลาง</MenuItem>
-            <MenuItem value="High">สูง</MenuItem>
-            <MenuItem value="Critical">ด่วนมาก</MenuItem>
+            {URGENCY_LEVEL_OPTIONS.map((urgency) => (
+              <MenuItem key={urgency} value={urgency}>
+                {getUrgencyLevelLabel(urgency)}
+              </MenuItem>
+            ))}
           </TextField>
         </Box>
       </Card>
@@ -229,7 +237,7 @@ const TicketList: React.FC<{ onNavigateToDetail: (id: string) => void }> = ({
                             {ticket.title}
                           </Typography>
                           <Typography variant="caption" color="text.secondary">
-                            {ticket.category}
+                            {getRepairCategoryLabel(ticket.category)}
                           </Typography>
                         </TableCell>
                         <TableCell>

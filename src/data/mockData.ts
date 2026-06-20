@@ -62,6 +62,7 @@ export const mockVehicles: Vehicle[] = [
     year: 2022,
     mileage: 62000,
     status: "Under Repair",
+    type: "Passenger Van",
   },
   {
     id: "VH-003",
@@ -71,6 +72,7 @@ export const mockVehicles: Vehicle[] = [
     year: 2023,
     mileage: 35000,
     status: "Active",
+    type: "Pickup Truck",
   },
   {
     id: "VH-004",
@@ -80,15 +82,7 @@ export const mockVehicles: Vehicle[] = [
     year: 2020,
     mileage: 120000,
     status: "Under Repair",
-  },
-  {
-    id: "VH-005",
-    licensePlate: "ญญ-7890",
-    brand: "Honda",
-    model: "City (รถเซลส์)",
-    year: 2023,
-    mileage: 28000,
-    status: "Active",
+    type: "Delivery Truck",
   },
   {
     id: "VH-006",
@@ -98,6 +92,7 @@ export const mockVehicles: Vehicle[] = [
     year: 2021,
     mileage: 75000,
     status: "Active",
+    type: "Passenger Van",
   },
   {
     id: "VH-007",
@@ -107,6 +102,7 @@ export const mockVehicles: Vehicle[] = [
     year: 2022,
     mileage: 95000,
     status: "Out of Service",
+    type: "Delivery Truck",
   },
 ];
 
@@ -258,42 +254,6 @@ export const mockTickets: Ticket[] = [
         timestamp: getPastDate(23),
         actor: "USR-002",
         note: "ทำเรียบร้อย",
-      },
-    ],
-    comments: [],
-    notes: "",
-  },
-  {
-    id: "TK-2024-005",
-    vehicleId: "VH-005",
-    driverId: "USR-003",
-    technicianId: "USR-002",
-    title: "ตรวจประจำตรวจรอบคัน",
-    description: "บำรุงรักษาประจำ ตรวจเช็คสายพานเพลา",
-    urgency: "Low",
-    category: "Maintenance",
-    status: "Completed",
-    cost: 1800,
-    createdAt: getPastDate(30),
-    updatedAt: getPastDate(29),
-    statusHistory: [
-      {
-        status: "Pending",
-        timestamp: getPastDate(30),
-        actor: "USR-003",
-        note: "นัดซ่อม",
-      },
-      {
-        status: "In Progress",
-        timestamp: getPastDate(30),
-        actor: "USR-002",
-        note: "ตรวจสอบ",
-      },
-      {
-        status: "Completed",
-        timestamp: getPastDate(29),
-        actor: "USR-002",
-        note: "ปกติดี",
       },
     ],
     comments: [],
@@ -485,30 +445,6 @@ export const mockTickets: Ticket[] = [
   },
 
   // PENDING TICKETS
-  {
-    id: "TK-2024-011",
-    vehicleId: "VH-005",
-    driverId: "USR-003",
-    technicianId: "",
-    title: "แอร์หน้าไม่เย็น",
-    description: "แอร์หน้าลมร้อน ลองเปิดสุดแล้ว",
-    urgency: "Medium",
-    category: "Air Conditioning",
-    status: "Pending",
-    cost: 0,
-    createdAt: getPastDate(1),
-    updatedAt: getPastDate(1),
-    statusHistory: [
-      {
-        status: "Pending",
-        timestamp: getPastDate(1),
-        actor: "USR-003",
-        note: "แจ้ง",
-      },
-    ],
-    comments: [],
-    notes: "",
-  },
   {
     id: "TK-2024-012",
     vehicleId: "VH-006",
@@ -851,44 +787,6 @@ export const mockTickets: Ticket[] = [
     notes: "",
   },
 
-  // VH-005 (Honda City) - Few repairs
-  {
-    id: "TK-2024-021",
-    vehicleId: "VH-005",
-    driverId: "USR-004",
-    technicianId: "USR-002",
-    title: "เปลี่ยนโลหะเก็บเชื้อเพลิง",
-    description: "แหวนเก็บเชื้อเพลิงรั่ว ต้องเปลี่ยน",
-    urgency: "Medium",
-    category: "Fuel System",
-    status: "Completed",
-    cost: 2800,
-    createdAt: getPastDate(80),
-    updatedAt: getPastDate(78),
-    statusHistory: [
-      {
-        status: "Pending",
-        timestamp: getPastDate(80),
-        actor: "USR-004",
-        note: "แจ้ง",
-      },
-      {
-        status: "In Progress",
-        timestamp: getPastDate(79),
-        actor: "USR-002",
-        note: "ซ่อม",
-      },
-      {
-        status: "Completed",
-        timestamp: getPastDate(78),
-        actor: "USR-002",
-        note: "เสร็จ",
-      },
-    ],
-    comments: [],
-    notes: "",
-  },
-
   // VH-006 (Hyundai H-1) - Few repairs
   {
     id: "TK-2024-022",
@@ -957,13 +855,6 @@ export const mockMonthlyCosts = [
   { vehicleId: "VH-004", month: "2024-10", cost: 0 },
   { vehicleId: "VH-004", month: "2024-11", cost: 0 },
   { vehicleId: "VH-004", month: "2024-12", cost: 0 },
-  // VH-005 (Honda City)
-  { vehicleId: "VH-005", month: "2024-07", cost: 1500 },
-  { vehicleId: "VH-005", month: "2024-08", cost: 2500 },
-  { vehicleId: "VH-005", month: "2024-09", cost: 1800 },
-  { vehicleId: "VH-005", month: "2024-10", cost: 1600 },
-  { vehicleId: "VH-005", month: "2024-11", cost: 2500 },
-  { vehicleId: "VH-005", month: "2024-12", cost: 1400 },
   // VH-006 (Hyundai H-1)
   { vehicleId: "VH-006", month: "2024-07", cost: 4200 },
   { vehicleId: "VH-006", month: "2024-08", cost: 3800 },

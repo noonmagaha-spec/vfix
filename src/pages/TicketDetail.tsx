@@ -27,6 +27,11 @@ import StatusStepper from "../components/StatusStepper";
 import TechnicianWorkflow from "../components/TechnicianWorkflow";
 import { StatusChip, UrgencyChip } from "../components/StatusChip";
 import type { Ticket } from "../types";
+import {
+  getRepairCategoryLabel,
+  getVehicleTypeLabel,
+  getTicketStatusLabel,
+} from "../data/constants";
 
 interface TicketDetailProps {
   ticketId: string;
@@ -93,7 +98,7 @@ const TicketDetail: React.FC<TicketDetailProps> = ({ ticketId, onBack }) => {
           status: "Closed",
           timestamp: now,
           actor: currentUser.name,
-          note: "Approved and closed by Admin",
+          note: "อนุมัติและปิดงานโดยผู้ดูแลระบบ",
         },
       ],
     });
@@ -144,7 +149,7 @@ const TicketDetail: React.FC<TicketDetailProps> = ({ ticketId, onBack }) => {
                     fontWeight: 600,
                   }}
                 >
-                  Category: {ticket.category}
+                  ประเภท: {getRepairCategoryLabel(ticket.category)}
                 </Typography>
               </Box>
 
@@ -185,7 +190,7 @@ const TicketDetail: React.FC<TicketDetailProps> = ({ ticketId, onBack }) => {
                     {vehicle.brand} {vehicle.model} ({vehicle.year})
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    ประเภท: {vehicle.type}
+                    ประเภท: {vehicle.type ? getVehicleTypeLabel(vehicle.type) : '-'}
                   </Typography>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
@@ -352,7 +357,7 @@ const TicketDetail: React.FC<TicketDetailProps> = ({ ticketId, onBack }) => {
           <Card>
             <CardContent sx={{ p: 3 }}>
               <Typography variant="h6" sx={{ mb: 3 }}>
-                Status History
+                ประวัติสถานะ
               </Typography>
               <Timeline sx={{ p: 0, m: 0 }}>
                 {ticket.statusHistory.map((history, index) => {
@@ -386,7 +391,7 @@ const TicketDetail: React.FC<TicketDetailProps> = ({ ticketId, onBack }) => {
                             variant="subtitle2"
                             sx={{ fontWeight: 700 }}
                           >
-                            {history.status}
+                            {getTicketStatusLabel(history.status)}
                           </Typography>
                         </Box>
                         <Typography

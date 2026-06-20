@@ -23,15 +23,14 @@ import * as yup from "yup";
 import { useData } from "../contexts/DataContext";
 import { useRole } from "../contexts/RoleContext";
 import type { Ticket, UrgencyLevel, RepairCategory } from "../types";
-
-const urgencyLevels: UrgencyLevel[] = ["Low", "Medium", "High", "Critical"];
-const repairCategories: RepairCategory[] = [
-  "Engine",
-  "Electrical",
-  "Tires",
-  "Body",
-  "Other",
-];
+import {
+  URGENCY_LEVEL_OPTIONS,
+  REPAIR_CATEGORY_OPTIONS,
+  VEHICLE_TYPE_OPTIONS,
+  getUrgencyLevelLabel,
+  getRepairCategoryLabel,
+  getVehicleTypeLabel,
+} from "../data/constants";
 
 // ─── Validation Schema ─────────────────────────────────────
 const repairSchema = yup.object().shape({
@@ -40,10 +39,10 @@ const repairSchema = yup.object().shape({
     .string()
     .required("กรุณาระบุรายละเอียดปัญหา")
     .min(10, "รายละเอียดต้องมีความยาวอย่างน้อย 10 อักขระ"),
-  urgency: yup.string().oneOf(urgencyLevels).required("กรุณาเลือกความเร่งด่วน"),
+  urgency: yup.string().oneOf(URGENCY_LEVEL_OPTIONS).required("กรุณาเลือกความเร่งด่วน"),
   category: yup
     .string()
-    .oneOf(repairCategories)
+    .oneOf(REPAIR_CATEGORY_OPTIONS)
     .required("กรุณาเลือกประเภทการซ่อม"),
   notes: yup.string().default(""),
 });
@@ -66,8 +65,8 @@ const SubmitRepairRequest: React.FC = () => {
     defaultValues: {
       vehicleId: "",
       description: "",
-      urgency: "Medium",
-      category: "Engine",
+      urgency: URGENCY_LEVEL_OPTIONS[1], // Medium
+      category: REPAIR_CATEGORY_OPTIONS[0], // Engine
       notes: "",
     },
   });
@@ -94,7 +93,7 @@ const SubmitRepairRequest: React.FC = () => {
           status: "Pending",
           timestamp: now,
           actor: currentUser.name,
-          note: "Repair request submitted",
+          note: "ส่งคำขอแจ้งซ่อม",
         },
       ],
       comments: [],
@@ -227,7 +226,7 @@ const SubmitRepairRequest: React.FC = () => {
                     >
                       {vehicles.map((v) => (
                         <MenuItem key={v.id} value={v.id}>
-                          {v.licensePlate} — {v.brand} {v.model} ({v.type})
+                          {v.licensePlate} — {v.brand} {v.model} ({v.type ? getVehicleTypeLabel(v.type) : '-'})
                         </MenuItem>
                       ))}
                     </TextField>
@@ -300,9 +299,9 @@ const SubmitRepairRequest: React.FC = () => {
                           },
                         }}
                       >
-                        {urgencyLevels.map((u) => (
+                        {URGENCY_LEVEL_OPTIONS.map((u) => (
                           <MenuItem key={u} value={u}>
-                            {u}
+                            {getUrgencyLevelLabel(u)}
                           </MenuItem>
                         ))}
                       </TextField>
@@ -325,9 +324,9 @@ const SubmitRepairRequest: React.FC = () => {
                           },
                         }}
                       >
-                        {repairCategories.map((c) => (
+                        {REPAIR_CATEGORY_OPTIONS.map((c) => (
                           <MenuItem key={c} value={c}>
-                            {c}
+                            {getRepairCategoryLabel(c)}
                           </MenuItem>
                         ))}
                       </TextField>

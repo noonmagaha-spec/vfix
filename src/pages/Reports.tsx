@@ -20,13 +20,14 @@ import ReactApexChart from "react-apexcharts";
 import type { ApexOptions } from "apexcharts";
 import { useData } from "../contexts/DataContext";
 import { mockMonthlyCosts } from "../data/mockData";
+import { getVehicleTypeLabel } from "../data/constants";
 
 const Reports: React.FC = () => {
   const { vehicles, tickets } = useData();
 
   const handleExport = () => {
     // Mock export functionality
-    alert("Exporting report as Excel file... (Mock functionality)");
+    alert("กำลังส่งออกรายงานเป็นไฟล์ Excel... (ฟังก์ชันจำลอง)");
   };
 
   // ─── Chart 1: Cost per Vehicle (Bar) ─────────────────────
@@ -61,7 +62,7 @@ const Reports: React.FC = () => {
   };
 
   const costBarSeries = [
-    { name: "Total Cost", data: costPerVehicle.map((v) => v.cost) },
+    { name: "ต้นทุนรวม", data: costPerVehicle.map((v) => v.cost) },
   ];
 
   // ─── Chart 2: Repair Frequency (Bar) ─────────────────────
@@ -85,12 +86,12 @@ const Reports: React.FC = () => {
     colors: ["#6C5CE7"],
     dataLabels: { enabled: false },
     xaxis: { categories: repairFreq.map((f) => f[0]) },
-    yaxis: { title: { text: "Number of Repairs" } },
+    yaxis: { title: { text: "จำนวนการซ่อม" } },
     grid: { borderColor: "#F0F0F0", strokeDashArray: 4 },
   };
 
   const freqBarSeries = [
-    { name: "Repairs", data: repairFreq.map((f) => f[1]) },
+    { name: "การซ่อม", data: repairFreq.map((f) => f[1]) },
   ];
 
   // ─── Table: Monthly Cost Summary ────────────────────────
@@ -128,10 +129,10 @@ const Reports: React.FC = () => {
       >
         <Box>
           <Typography variant="h5" sx={{ mb: 0.5 }}>
-            รายละอิยโดย และรายงานการซ่อม
+            รายละเอียดและรายงานการซ่อม
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            ค่าช่อมและการวิเคราะห์สำหรับเชื่อกระคุณโครงการทึ่มถี่
+            รายงานค่าใช้จ่ายและการวิเคราะห์ข้อมูลการซ่อมบำรุง
           </Typography>
         </Box>
         <Button
@@ -163,7 +164,7 @@ const Reports: React.FC = () => {
         <Grid size={{ xs: 12, md: 6 }}>
           <Card sx={{ p: 3, height: "100%" }}>
             <Typography variant="h6" sx={{ mb: 2, fontSize: "1rem" }}>
-              จำนวนการซ่อมส่งประเภทรถยนต์
+              จำนวนการซ่อมตามประเภทรถยนต์
             </Typography>
             <ReactApexChart
               options={freqBarOptions}
@@ -187,7 +188,7 @@ const Reports: React.FC = () => {
           }}
         >
           <Typography variant="h6" sx={{ fontSize: "1rem" }}>
-            สรุปค่าบริหารยอย่างรายเดือน (ไตรมาส 2567)
+            สรุปค่าใช้จ่ายรายเดือน (ไตรมาส 4 ปี 2567)
           </Typography>
         </Box>
         <TableContainer>
@@ -218,7 +219,7 @@ const Reports: React.FC = () => {
                         {v.licensePlate}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
-                        {v.type}
+                        {getVehicleTypeLabel(v.type)}
                       </Typography>
                     </TableCell>
                     {months.map((m) => {
@@ -242,7 +243,7 @@ const Reports: React.FC = () => {
               {/* Grand Total Row */}
               <TableRow sx={{ backgroundColor: "#F8FAFD" }}>
                 <TableCell sx={{ fontWeight: 800 }}>
-                  รวมทั้งหมดทั้งเจ้าตัว
+                  รวมทั้งหมด
                 </TableCell>
                 {months.map((m) => (
                   <TableCell key={m} align="right" sx={{ fontWeight: 800 }}>

@@ -25,7 +25,12 @@ import PeopleIcon from "@mui/icons-material/People";
 import BuildCircleIcon from "@mui/icons-material/BuildCircle";
 import RoleSwitcher from "./RoleSwitcher";
 import { useRole } from "../contexts/RoleContext";
+import { useAuth } from "../contexts/AuthContext";
 import type { Role } from "../types";
+import LogoutIcon from "@mui/icons-material/Logout";
+import Avatar from "@mui/material/Avatar";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 const DRAWER_WIDTH = 260;
 
@@ -88,13 +93,28 @@ const Layout: React.FC<LayoutProps> = ({
   children,
 }) => {
   const { currentRole } = useRole();
+  const { user, logout } = useAuth();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const filteredNavItems = navItems.filter((item) =>
     item.roles.includes(currentRole),
   );
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    handleMenuClose();
+    logout();
+  };
 
   const drawer = (
     <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
@@ -266,7 +286,64 @@ const Layout: React.FC<LayoutProps> = ({
               ระบบแจ้งซ่อมและจัดการยานพาหนะ
             </Typography>
           </Box>
-          <RoleSwitcher />
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            {user?.canSwitchRoles && <RoleSwitcher />}
+            <IconButton
+              onClick={handleMenuOpen}
+              sx={{ color: "white" }}
+              size="small"
+            >
+              <Avatar
+                sx={{
+                  width: 36,
+                  height: 36,
+                  background: "rgba(255,255,255,0.2)",
+                  color: "white",
+                  fontWeight: 600,
+                  fontSize: "0.875rem",
+                }}
+              >
+                {user?.username.charAt(0).toUpperCase()}
+              </Avatar>
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              slotProps={{
+                paper: {
+                  sx: {
+                    mt: 1,
+                    minWidth: 180,
+                    borderRadius: 2,
+                    boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
+                  },
+                },
+              }}
+            >
+              <MenuItem disabled sx={{ fontWeight: 600 }}>
+                {user?.username}
+              </MenuItem>
+              <MenuItem disabled sx={{ fontSize: "0.875rem", color: "#636E72" }}>
+                บทบาท: {currentRole}
+              </MenuItem>
+              <MenuItem
+                onClick={handleLogout}
+                sx={{ color: "#E74C3C", fontWeight: 500 }}
+              >
+                <LogoutIcon sx={{ mr: 1, fontSize: 20 }} />
+                ออกจากระบบ
+              </MenuItem>
+            </Menu>
+          </Box>
         </Toolbar>
       </AppBar>
 
