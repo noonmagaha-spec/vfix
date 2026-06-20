@@ -26,7 +26,6 @@ import type { Ticket, UrgencyLevel, RepairCategory } from "../types";
 import {
   URGENCY_LEVEL_OPTIONS,
   REPAIR_CATEGORY_OPTIONS,
-  VEHICLE_TYPE_OPTIONS,
   getUrgencyLevelLabel,
   getRepairCategoryLabel,
   getVehicleTypeLabel,

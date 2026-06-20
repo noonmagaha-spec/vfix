@@ -22,7 +22,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useData } from "../contexts/DataContext";
 import { useRole } from "../contexts/RoleContext";
 import { StatusChip, UrgencyChip } from "../components/StatusChip";
-import type { TicketStatus, UrgencyLevel, RepairCategory } from "../types";
+import type { TicketStatus, UrgencyLevel } from "../types";
 import {
   TICKET_STATUS_OPTIONS,
   URGENCY_LEVEL_OPTIONS,
