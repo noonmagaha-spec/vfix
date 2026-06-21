@@ -326,7 +326,7 @@ const Dashboard: React.FC = () => {
   return (
     <Box>
       <Typography variant="h5" sx={{ mb: 0.5 }}>
-        แดชบอร์ด
+        Dashboard
       </Typography>
       <Typography variant="body2" sx={{ mb: 3, color: "text.secondary" }}>
         ภาพรวมการบำรุงรักษาและการวิเคราะห์กลุ่มรถ
