@@ -793,7 +793,7 @@ export const mockTickets: Ticket[] = [
     vehicleId: "VH-006",
     driverId: "USR-004",
     technicianId: "USR-002",
-    title: "ปัสสวะหนาวขึ้นเต็มไปด่วน",
+    title: "เครื่องยนต์มีปัญหา",
     description: "ระบายหล่อเย็นมีปัญหา น้ำหลากจากท่อที่เชื่อมต่อ",
     urgency: "High",
     category: "Cooling",
